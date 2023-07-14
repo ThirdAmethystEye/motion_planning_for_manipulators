@@ -1,11 +1,13 @@
 def collision_section(joints, obstacles):
+    output = ''
     for i in range(joints):
         for j in range(obstacles):
-            f.write(' ' * 8 + f'<pair geom1="geom edge {i}" geom2="geom obstacle {j}"/>\n')
+            output += ' ' * 8 + f'<pair geom1="geom edge {i}" geom2="geom obstacle {j}"/>\n'
     for i in range(joints):
         for j in range(joints):
             if j - i > 1:
-                f.write(' ' * 8 + f'<pair geom1="geom edge {i}" geom2="geom edge {j}"/>\n')
+                output += ' ' * 8 + f'<pair geom1="geom edge {i}" geom2="geom edge {j}"/>\n'
+    return output
 
 def manipulator_autogen(joints, size, pos):
     output = ''
@@ -45,7 +47,6 @@ def manipulator_autogen(joints, size, pos):
 joints = 2
 obstacles = 6
 
-file_path_to_edges = 'tools/edges.txt'
 file_path_to_obstacles = 'tools/obstacles.txt'
 
 with open(f'tools/{joints}-dof_{obstacles}-obs_manipulator.xml', "w+") as f:
@@ -58,6 +59,6 @@ with open(f'tools/{joints}-dof_{obstacles}-obs_manipulator.xml', "w+") as f:
     f.write('\n')
     f.write('    </worldbody>\n\n')
     f.write('    <contact>\n')
-    collision_section(joints, obstacles)    
+    f.write(collision_section(joints, obstacles))    
     f.write('    </contact>\n')
     f.write(open('tools/const/footer.txt', 'r').read())
